@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Регистрации участников — дашборд</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div>
+        <h1>Регистрации участников</h1>
+        <p class="sub" id="source-info">Загрузка данных…</p>
+        <p class="quality" id="quality"></p>
+      </div>
+      <div class="actions">
+        <label class="btn" for="file-input" title="Только просмотр: файл на сервере не меняется">Открыть другой CSV</label>
+        <input id="file-input" type="file" accept=".csv,text/csv" hidden>
+        <button class="btn" id="export-btn" type="button">Экспорт CSV</button>
+        <button class="btn ghost" id="refresh-btn" type="button" title="Файл перечитывается сам каждые 10 секунд">Перечитать файл</button>
+        <button class="btn ghost" id="theme-btn" type="button" aria-label="Переключить тему">Тема: авто</button>
+      </div>
+    </header>
+
+    <section class="filters" aria-label="Фильтры">
+      <label class="field grow"><span>Поиск по имени</span>
+        <input id="f-q" type="search" placeholder="Например, Участник 05">
+      </label>
+      <label class="field"><span>Город</span><select id="f-city"></select></label>
+      <label class="field"><span>Источник</span><select id="f-source"></select></label>
+      <label class="field"><span>Билет</span><select id="f-ticket"></select></label>
+      <label class="field"><span>Оплата</span>
+        <select id="f-paid">
+          <option value="">Все</option>
+          <option value="yes">Оплачено</option>
+          <option value="no">Не оплачено</option>
+        </select>
+      </label>
+      <label class="field"><span>С даты</span><input id="f-from" type="date"></label>
+      <label class="field"><span>По дату</span><input id="f-to" type="date"></label>
+      <button class="btn ghost" id="reset-btn" type="button">Сбросить</button>
+    </section>
+
+    <section class="kpis" id="kpis" aria-label="Ключевые показатели"></section>
+
+    <div class="grid">
+      <section class="card span-12" id="card-insights">
+        <h2>Что видно в данных</h2>
+        <div class="insights">
+          <ul id="insights"></ul>
+          <div class="attention">
+            <div class="att-head">
+              <h3>Ждут оплаты</h3>
+              <button class="link" id="show-unpaid" type="button">показать в таблице</button>
+            </div>
+            <ul id="attention"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="card span-8">
+        <div class="card-head">
+          <h2>Регистрации по дням</h2>
+          <div class="legend" aria-hidden="true"><span><i class="sw paid"></i>Оплатили</span><span><i class="sw unpaid"></i>Не оплатили</span></div>
+        </div>
+        <div class="chart" id="chart-daily"></div>
+      </section>
+
+      <section class="card span-4">
+        <div class="card-head"><h2>Нарастающим итогом</h2></div>
+        <div class="chart" id="chart-cum"></div>
+      </section>
+
+      <section class="card span-4">
+        <div class="card-head">
+          <h2>По городам</h2>
+          <div class="legend" aria-hidden="true"><span><i class="sw paid"></i>Оплатили</span><span><i class="sw unpaid"></i>Не оплатили</span></div>
+        </div>
+        <div class="bars" id="bars-city"></div>
+      </section>
+
+      <section class="card span-4">
+        <div class="card-head">
+          <h2>По источникам</h2>
+          <div class="legend" aria-hidden="true"><span><i class="sw paid"></i>Оплатили</span><span><i class="sw unpaid"></i>Не оплатили</span></div>
+        </div>
+        <div class="bars" id="bars-source"></div>
+      </section>
+
+      <section class="card span-4">
+        <div class="card-head">
+          <h2>По типам билетов</h2>
+          <div class="legend" aria-hidden="true"><span><i class="sw paid"></i>Оплатили</span><span><i class="sw unpaid"></i>Не оплатили</span></div>
+        </div>
+        <div class="bars" id="bars-ticket"></div>
+      </section>
+
+      <section class="card span-12">
+        <div class="card-head">
+          <h2>Город × источник</h2>
+          <span class="hint">Чем темнее ячейка, тем больше регистраций</span>
+        </div>
+        <div class="matrix-wrap" id="matrix"></div>
+      </section>
+
+      <section class="card span-12">
+        <div class="card-head">
+          <h2>Участники <span class="count" id="table-count"></span></h2>
+        </div>
+        <div class="table-wrap">
+          <table id="table">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="table-foot"><button class="btn ghost" id="more-btn" type="button" hidden>Показать ещё</button></div>
+      </section>
+    </div>
+
+    <footer class="foot">Данные читаются из файла registrations.csv на сервере: поправили файл — страница обновится сама. Колонки: name, city, registered, source, ticket, paid.</footer>
+  </div>
+
+  <div id="tip" class="tip" role="tooltip" hidden></div>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <div id="drop" class="drop" hidden>Отпустите CSV-файл, чтобы открыть</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
